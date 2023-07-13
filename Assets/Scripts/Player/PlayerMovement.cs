@@ -9,6 +9,14 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveVelocity;
     private Animator anim;
     private bool looksRight = true;
+    public float HP;
+    public bool IsDead
+    {
+        get
+        {
+            return HP == 0;
+        }
+    }
 
     void Start()
     {
@@ -32,6 +40,11 @@ public class PlayerMovement : MonoBehaviour
         {
             anim.SetBool("Run", false);
         }
+
+        if (IsDead)
+        {
+            anim.SetTrigger("Death");
+        }
     }
 
         
@@ -54,5 +67,11 @@ public class PlayerMovement : MonoBehaviour
     {
         looksRight = !looksRight;
         transform.Rotate(0f, 180f, 0f);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+            HP -= 10;
     }
 }

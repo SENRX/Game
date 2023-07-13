@@ -22,9 +22,9 @@ public class Barrel : MonoBehaviour
        
     }
 
-    IEnumerable breakCo()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        yield return new WaitForSeconds(.3f);
-        this.gameObject.SetActive(false);
+        if (collision.gameObject.tag == "Player")
+            Destroy(gameObject);
     }
 }
