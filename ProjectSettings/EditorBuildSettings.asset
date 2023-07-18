@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Game.unity
     guid: 48249c5e72279ea4eaae9f2580f74e23
+  - enabled: 1
+    path: Assets/Coming Soon.unity
+    guid: 88e378bb4eddd564ea0cbaf7157f0037
   m_configObjects: {}

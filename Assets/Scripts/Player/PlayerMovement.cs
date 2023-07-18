@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement instance;
+
+
     public float speed;
     private Rigidbody2D rb;
     private Vector2 moveVelocity;
     private Animator anim;
     private bool looksRight = true;
     public float HP;
+
     public bool IsDead
     {
         get
@@ -20,11 +24,13 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+       instance = this;
        rb = GetComponent<Rigidbody2D>();
        anim = GetComponent<Animator>();
+
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         moveVelocity.x = Input.GetAxisRaw("Horizontal");

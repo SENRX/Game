@@ -1,60 +1,59 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 public class Inventory : MonoBehaviour
 {
-    public List<ItemInventory> items = new List<ItemInventory>();
+    public static Inventory instance;
 
-    public GameObject gameObjShow;
+    public Transform SlotsParent;
 
-    public GameObject InventoryMainObject;
-    public int maxCount;
+    bool isOpened;
 
-    public void AddItem(int id, Item item, int count)
+    private InventorySlot[] inventorySlots = new InventorySlot[18];
+
+    private void Start()
     {
-        items[id].id = item.id;
-        items[id].count = count;
-        items[id].itemGameObj.GetComponent<Image>().sprite = item.img;
+        instance = this;
 
-        if (count > 1) 
+        for (int i = 0; i < inventorySlots.Length; i++)
         {
-            items[id].itemGameObj.GetComponentInChildren<Text>().text = count.ToString();
+            inventorySlots[i] = SlotsParent.GetChild(i).GetComponent<InventorySlot>();
         }
     }
 
-
-    public void AddGraphics()
+    public void PutInEmptySlot(Item item, GameObject obj)
     {
-        for (int i = 0; i < maxCount; i++) 
-        { 
-            GameObject newItem = Instantiate(gameObjShow, InventoryMainObject.transform) as GameObject;
-
-            newItem.name = i.ToString();
-
-            ItemInventory ii = new ItemInventory();
-            ii.itemGameObj = newItem;
-
-            RectTransform rt = newItem.GetComponent<RectTransform>();
-            rt.localPosition = new Vector3(0, 0, 0);
-            rt.localScale = new Vector3(1, 1, 1);
-            newItem.GetComponentInChildren<RectTransform>().localScale = new Vector3(1, 1, 1);
-
-            Button tempButton = newItem.GetComponent<Button>();
-
-            items.Add(ii);
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            if (inventorySlots[i].SlotItem == null)
+            {
+                inventorySlots[i].PutInSlot(item, obj);
+                return;
+            } 
         }
     }
-}
 
-[System.Serializable]
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab)) 
+        { 
+            if (isOpened)
+                Close();
+            else
+                Open();
+        }
+    }
 
-public class ItemInventory
-{
-    public int id;
-    public GameObject itemGameObj;
+    void Open()
+    {
+        gameObject.transform.localScale = Vector3.one;
+        isOpened = true;
+    }
 
-    public int count;
+    void Close() 
+    {
+        gameObject.transform.localScale = Vector3.zero;
+        isOpened = false;
+    }
 }
